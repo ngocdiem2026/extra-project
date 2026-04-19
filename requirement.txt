@@ -1,6 +1,8 @@
+//cSpell: disable
 🚀 PROJECT: THE BUG ANALYTICS ENGINE 
 📝 Ngữ cảnh (Context)
-Hệ thống của bạn nhận dữ liệu từ một API bên thứ ba. Dữ liệu này thường rất "bẩn" (nested objects, sai kiểu dữ liệu, thiếu trường). Bạn cần xây dựng một Engine có khả năng làm sạch dữ liệu, chuyển đổi chúng thành Class Instances và thực hiện đồng bộ hóa với cơ chế Retry chuyên nghiệp.
+Hệ thống của bạn nhận dữ liệu từ một API bên thứ ba. Dữ liệu này thường rất "bẩn" (nested objects, sai kiểu dữ liệu, thiếu trường). 
+Bạn cần xây dựng một Engine có khả năng làm sạch dữ liệu, chuyển đổi chúng thành Class Instances và thực hiện đồng bộ hóa với cơ chế Retry chuyên nghiệp.
 🛠 Yêu cầu kỹ thuật (Requirements)
 1. Custom Error & Validation (OOP)
 - Tạo class ValidationError kế thừa từ Error(đây là một built-in).
