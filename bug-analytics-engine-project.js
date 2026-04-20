@@ -8,6 +8,12 @@ class ValidationError extends Error {
 class Issue {
     constructor({ id, title, priority = 'Low', status = 'Open' }) {
         // TODO: (1) Thực hiện validate priority tại đây
+        const validPriorities = ['High', 'Medium', 'Low'];
+
+        // ❗ validate tại đây
+        if (!validPriorities.includes(priority)) {
+            throw new ValidationError(`Invalid priority: ${priority}`);
+        }
         this.id = id;
         this.title = title;
         this.priority = priority;
@@ -15,6 +21,30 @@ class Issue {
         this.createdAt = new Date();
     }
 }
+
+// we can test by the coding below for todo01
+// try {
+//     const issue1 = new Issue({
+//         id: 1,
+//         title: "Fix bug login",
+//         priority: "High"
+//     });
+
+//     console.log("OK:", issue1);
+
+//     const issue2 = new Issue({
+//         id: 2,
+//         title: "Fix UI",
+//         priority: "Urgent" // lỗi vì không hợp lệ
+//     });
+
+// } catch (err) {
+//     if (err instanceof ValidationError) {
+//         console.log("Validation Error:", err.message);
+//     } else {
+//         console.log("Other Error:", err);
+//     }
+// }
 
 class Bug extends Issue {
     constructor(data) {
@@ -49,7 +79,7 @@ async function uploadWithRetry(issue, maxRetries = 3) {
     //    - Kiểm tra xem đã hết lượt retry chưa. Nếu hết, throw Error.
     //    - Nếu còn lượt, hãy tính toán waitTime = số_lần_thử * 1000ms.
     //    - Sử dụng await new Promise(res => setTimeout(res, waitTime)) để tạo khoảng nghỉ.
-    
+
     // CODE CỦA BẠN DƯỚI ĐÂY:
 }
 
@@ -72,7 +102,7 @@ async function runDemo() {
     try {
         console.log("--- 1. Processing Data ---");
         engine.addIssues(messyData);
-        
+
         console.log("--- 2. Deep Analytics ---");
         console.log(engine.getDeepStats());
 
