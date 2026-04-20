@@ -12,7 +12,7 @@ class Issue {
 
         // ❗ validate tại đây
         if (!validPriorities.includes(priority)) {
-            throw new ValidationError(`Invalid priority: ${priority}`);
+            throw new ValidationError(`Invalid priority: ${priority}. Allowed priority values are: High, Medium, Low.`);
         }
         this.id = id;
         this.title = title;
