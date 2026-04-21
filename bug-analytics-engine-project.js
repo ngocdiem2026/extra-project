@@ -40,18 +40,18 @@ class IssueEngine {
  * @param {Issue} issue - Đối tượng cần upload
  * @param {number} maxRetries - Số lần thử tối đa
  */
-async function uploadWithRetry(issue, maxRetries = 3) {
-    // TODO: (4)
-    // 1. Sử dụng vòng lặp (for hoặc while) để giới hạn số lần thử.
-    // 2. Bọc hàm simulateApiCall() trong khối try...catch.
-    // 3. Nếu THÀNH CÔNG (try): return kết quả ngay lập tức.
-    // 4. Nếu THẤT BẠI (catch): 
-    //    - Kiểm tra xem đã hết lượt retry chưa. Nếu hết, throw Error.
-    //    - Nếu còn lượt, hãy tính toán waitTime = số_lần_thử * 1000ms.
-    //    - Sử dụng await new Promise(res => setTimeout(res, waitTime)) để tạo khoảng nghỉ.
+// async function uploadWithRetry(issue, maxRetries = 3) {
+//     // TODO: (4)
+//     // 1. Sử dụng vòng lặp (for hoặc while) để giới hạn số lần thử.
+//     // 2. Bọc hàm simulateApiCall() trong khối try...catch.
+//     // 3. Nếu THÀNH CÔNG (try): return kết quả ngay lập tức.
+//     // 4. Nếu THẤT BẠI (catch): 
+//     //    - Kiểm tra xem đã hết lượt retry chưa. Nếu hết, throw Error.
+//     //    - Nếu còn lượt, hãy tính toán waitTime = số_lần_thử * 1000ms.
+//     //    - Sử dụng await new Promise(res => setTimeout(res, waitTime)) để tạo khoảng nghỉ.
 
-    // CODE CỦA BẠN DƯỚI ĐÂY:
-}
+//     // CODE CỦA BẠN DƯỚI ĐÂY:
+// }
 //todo: (4) -> DienNguyen.
 async function uploadWithRetry(issue, maxRetries = 3) {
     // if (!Number.isInteger(maxRetries) || maxRetries < 1) {
@@ -64,27 +64,25 @@ async function uploadWithRetry(issue, maxRetries = 3) {
     if (maxRetries < 1) {
         throw new Error(`Invalid maxRetries: "${maxRetries}". Must be greater than 0.`);
     }
-}
-for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-        const result = await simulateApiCall();
-        //issue is defined but not used. It should be used in logs or return messages, such as "Attempt ${attempt}: Upload for issue ${issue.id} succeeded."
-        console.log(`[Attempt ${attempt}] Upload succeeded.`);
-        return result;
-    } catch (err) {
-        //issue is defined but not used. It should be used in logs or return messages, such as "Attempt ${attempt}: Upload for issue ${issue.id} succeeded."
-        console.warn(`[Attempt ${attempt}] Failed — ${err}`);
-        if (attempt === maxRetries) {
-            //issue is defined but not used. It should be used in logs or return messages, such as "Attempt ${attempt}: Upload for issue ${issue.id} succeeded."
-            throw new Error(`Upload failed after ${maxRetries} retries. Last error: ${err}`);
-        }
-        const waitTime = attempt * 1000;
-        //issue is defined but not used. It should be used in logs or return messages, such as "Attempt ${attempt}: Upload for issue ${issue.id} succeeded."
-        console.log(`Retrying in ${waitTime / 1000}s...`);
-        await new Promise(res => setTimeout(res, waitTime));
-    }
-}
 
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            const result = await simulateApiCall();
+            console.log(`[Attempt ${attempt}] Upload for issue ${issue.id} succeeded.`);
+            return result;
+        } catch (err) {
+            console.warn(`[Attempt ${attempt}] Upload for issue ${issue.id} failed — ${err}`);
+            if (attempt === maxRetries) {
+                throw new Error(`Upload for issue ${issue.id} failed after ${maxRetries} retries. Last error: ${err}`);
+            }
+            const waitTime = attempt * 1000;
+            //
+            console.log(`Retrying in ${waitTime / 1000}s...`);
+            await new Promise(res => setTimeout(res, waitTime));
+        }
+    }
+
+}
 
 // Hàm giả lập API (KHÔNG SỬA HÀM NÀY)
 function simulateApiCall() {
