@@ -54,6 +54,9 @@ async function uploadWithRetry(issue, maxRetries = 3) {
 }
 //todo: (4) -> DienNguyen.
 async function uploadWithRetry(issue, maxRetries = 3) {
+    if (!Number.isInteger(maxRetries) || maxRetries < 1) {
+        throw new Error(`Invalid maxRetries: "${maxRetries}". Must be an integer greater than 0.`);
+    }
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
             const result = await simulateApiCall();
