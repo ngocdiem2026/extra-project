@@ -40,31 +40,12 @@ class IssueEngine {
  * @param {Issue} issue - Đối tượng cần upload
  * @param {number} maxRetries - Số lần thử tối đa
  */
-// async function uploadWithRetry(issue, maxRetries = 3) {
-//     // TODO: (4)
-//     // 1. Sử dụng vòng lặp (for hoặc while) để giới hạn số lần thử.
-//     // 2. Bọc hàm simulateApiCall() trong khối try...catch.
-//     // 3. Nếu THÀNH CÔNG (try): return kết quả ngay lập tức.
-//     // 4. Nếu THẤT BẠI (catch): 
-//     //    - Kiểm tra xem đã hết lượt retry chưa. Nếu hết, throw Error.
-//     //    - Nếu còn lượt, hãy tính toán waitTime = số_lần_thử * 1000ms.
-//     //    - Sử dụng await new Promise(res => setTimeout(res, waitTime)) để tạo khoảng nghỉ.
-
-//     // CODE CỦA BẠN DƯỚI ĐÂY:
-// }
-//todo: (4) -> DienNguyen.
+// TODO:(4) -> DienNguyen.
 async function uploadWithRetry(issue, maxRetries = 3) {
-    // if (!Number.isInteger(maxRetries) || maxRetries < 1) {
-    //     throw new Error(`Invalid maxRetries: "${maxRetries}". Must be an integer greater than 0.`);
+    if (!Number.isInteger(maxRetries) || maxRetries < 1) {
+        throw new Error(`Invalid maxRetries: "${maxRetries}". Must be an integer greater than 0.`);
 
-    // To prevent a loop with a logic error, the value of maxRetries should be verified. maxRetries must be an integer greater than 0.
-    if (!Number.isInteger(maxRetries)) {
-        throw new Error(`Invalid maxRetries: "${maxRetries}". Must be an integer.`);
     }
-    if (maxRetries < 1) {
-        throw new Error(`Invalid maxRetries: "${maxRetries}". Must be greater than 0.`);
-    }
-
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
             const result = await simulateApiCall();
