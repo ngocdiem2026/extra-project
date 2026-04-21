@@ -54,25 +54,37 @@ async function uploadWithRetry(issue, maxRetries = 3) {
 }
 //todo: (4) -> DienNguyen.
 async function uploadWithRetry(issue, maxRetries = 3) {
-    if (!Number.isInteger(maxRetries) || maxRetries < 1) {
-        throw new Error(`Invalid maxRetries: "${maxRetries}". Must be an integer greater than 0.`);
+    // if (!Number.isInteger(maxRetries) || maxRetries < 1) {
+    //     throw new Error(`Invalid maxRetries: "${maxRetries}". Must be an integer greater than 0.`);
+
+    // To prevent a loop with a logic error, the value of maxRetries should be verified. maxRetries must be an integer greater than 0.
+    if (!Number.isInteger(maxRetries)) {
+        throw new Error(`Invalid maxRetries: "${maxRetries}". Must be an integer.`);
     }
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-        try {
-            const result = await simulateApiCall();
-            console.log(`[Attempt ${attempt}] Upload succeeded.`);
-            return result;
-        } catch (err) {
-            console.warn(`[Attempt ${attempt}] Failed — ${err}`);
-            if (attempt === maxRetries) {
-                throw new Error(`Upload failed after ${maxRetries} retries. Last error: ${err}`);
-            }
-            const waitTime = attempt * 1000;
-            console.log(`Retrying in ${waitTime / 1000}s...`);
-            await new Promise(res => setTimeout(res, waitTime));
-        }
+    if (maxRetries < 1) {
+        throw new Error(`Invalid maxRetries: "${maxRetries}". Must be greater than 0.`);
     }
 }
+for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+        const result = await simulateApiCall();
+        //issue is defined but not used. It should be used in logs or return messages, such as "Attempt ${attempt}: Upload for issue ${issue.id} succeeded."
+        console.log(`[Attempt ${attempt}] Upload succeeded.`);
+        return result;
+    } catch (err) {
+        //issue is defined but not used. It should be used in logs or return messages, such as "Attempt ${attempt}: Upload for issue ${issue.id} succeeded."
+        console.warn(`[Attempt ${attempt}] Failed — ${err}`);
+        if (attempt === maxRetries) {
+            //issue is defined but not used. It should be used in logs or return messages, such as "Attempt ${attempt}: Upload for issue ${issue.id} succeeded."
+            throw new Error(`Upload failed after ${maxRetries} retries. Last error: ${err}`);
+        }
+        const waitTime = attempt * 1000;
+        //issue is defined but not used. It should be used in logs or return messages, such as "Attempt ${attempt}: Upload for issue ${issue.id} succeeded."
+        console.log(`Retrying in ${waitTime / 1000}s...`);
+        await new Promise(res => setTimeout(res, waitTime));
+    }
+}
+
 
 // Hàm giả lập API (KHÔNG SỬA HÀM NÀY)
 function simulateApiCall() {
