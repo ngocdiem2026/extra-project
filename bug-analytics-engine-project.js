@@ -80,7 +80,31 @@ async function uploadWithRetry(issue, maxRetries = 3) {
     //    - Nếu còn lượt, hãy tính toán waitTime = số_lần_thử * 1000ms.
     //    - Sử dụng await new Promise(res => setTimeout(res, waitTime)) để tạo khoảng nghỉ.
 
-    // CODE CỦA BẠN DƯỚI ĐÂY:
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            console.log(`Uploading Issue [${issue.id}] - ${issue.title} (Attempt ${attempt})`);
+
+            const result = await simulateApiCall();
+
+            console.log(`Success [${issue.id}] at attempt ${attempt}`);
+            return result;
+
+        } catch (error) {
+            console.warn(`Failed [${issue.id}] at attempt ${attempt}: ${error}`);
+
+            if (attempt === maxRetries) {
+                console.error(`FINAL FAIL [${issue.id}] after ${maxRetries} attempts`);
+                throw new Error(
+                    `Upload failed for Issue ${issue.id} after ${maxRetries} attempts`
+                );
+            }
+
+            const waitTime = attempt * 1000;
+            console.log(`Retry Issue [${issue.id}] after ${waitTime}ms...`);
+
+            await new Promise(res => setTimeout(res, waitTime));
+        }
+    }
 }
 
 // Hàm giả lập API (KHÔNG SỬA HÀM NÀY)
